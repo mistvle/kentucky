@@ -8,9 +8,10 @@ module.exports = {
 
     // ================= AFK REMOVE =================
     if (
-      client.afk?.has(message.author.id) &&
-      !message.content.startsWith(`${client.prefix}afk`)
-    ) {
+  client.afk?.has(message.author.id) &&
+  !message.content.startsWith(`${client.prefix}afk`) &&
+  !message.mentions.users.has(message.author.id)
+) {
 
       client.afk.delete(message.author.id);
 
