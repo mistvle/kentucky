@@ -25,6 +25,8 @@ module.exports = {
       "content": "<:bell:1506530215223099412> @curently moderating Ensure to conduct Discord checks to avoid receiving a negative review or an infraction."
     }
   ]
-})
+});
+
+    await interaction.reply({content: "<:check:1506513370625347816> **Successfully** sent reminder.", flags: 64})
     }
 }
