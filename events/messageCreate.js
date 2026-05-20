@@ -11,7 +11,12 @@ module.exports = {
       client.afk?.has(message.author.id) &&
       !message.content.startsWith(`${client.prefix}afk`)
     ) {
+
       client.afk.delete(message.author.id);
+
+      await message.author.send(
+        "<:bell:1506530215223099412> Your AFK status has ended."
+      ).catch(() => {});
 
       await message.reply(
         "<:check:1506513370625347816> Welcome back, your AFK has been removed."
@@ -39,13 +44,19 @@ module.exports = {
 
         // expired
         if (Date.now() > afkData.expires) {
+
           client.afk.delete(mentionedUser.id);
+
+          await mentionedUser.send(
+            "<:bell:1506530215223099412> Your AFK status has ended."
+          ).catch(() => {});
+
         } else {
 
           const elapsed = ms(Date.now() - afkData.since, { long: true });
 
           await message.reply(
-            `${mentionedUser.username} is currently **AFK** - ${elapsed}\nReason: ${afkData.reason}`
+            `<:dnd:1506529404786970634> ${mentionedUser.username} is currently **AFK** - ${elapsed}\nReason: ${afkData.reason}`
           );
         }
       }

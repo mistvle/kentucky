@@ -11,16 +11,22 @@ module.exports = {
         }
 
         // ================= END AFK =================
-        if (args[0]?.toLowerCase() === "end") {
+if (args[0]?.toLowerCase() === "end") {
 
-            if (!message.client.afk.has(message.author.id)) {
-                return message.reply("<:xMark:1506513418470035467> You are not currently AFK.");
-            }
+    if (!message.client.afk.has(message.author.id)) {
+        return message.reply("<:xMark:1506513418470035467> You are not currently AFK.");
+    }
 
-            message.client.afk.delete(message.author.id);
+    message.client.afk.delete(message.author.id);
 
-            return message.reply("<:check:1506513370625347816> Your AFK status has been removed.");
-        }
+    await message.author.send(
+        "<:bell:1506530215223099412> Your AFK status has ended."
+    ).catch(() => {});
+
+    return message.reply(
+        "<:check:1506513370625347816> Your AFK status has been removed."
+    );
+}
 
         // ================= SET AFK =================
         const timeInput = args[0];
