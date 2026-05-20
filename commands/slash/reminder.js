@@ -16,7 +16,7 @@ module.exports = {
             return interaction.reply({content: ""})
         }
 
-        const channel = interaction.guild.channels.cache.get("1506125788607549644");
+        const channel = interaction.guild.channels.cache.get("1392335234569207858");
         await channel.send({
   "flags": 32768,
   "components": [
