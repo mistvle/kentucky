@@ -54,11 +54,11 @@ module.exports = {
 
         } else {
 
-          const elapsed = ms(Date.now() - afkData.since, { long: true });
+          const remaining = `<t:${Math.floor(afkData.expires / 1000)}:R>`;
 
-          await message.reply(
-            `<:dnd:1506529404786970634> ${mentionedUser.username} is currently **AFK** - ${elapsed}\nReason: ${afkData.reason}`
-          );
+await message.reply(
+  `<:dnd:1506531236871409694> ${mentionedUser.username} is currently **AFK** - ${afkData.reason}, ends in ${remaining}.`
+);
         }
       }
     }
