@@ -40,7 +40,7 @@ module.exports = {
           const elapsed = ms(Date.now() - afkData.since, { long: true });
 
           await message.reply(
-            `${mentionedUser.username} is currently **AFK** - ${elapsed}\nReason: ${afkData.reason}`
+            `<:dnd:1506529404786970634> ${mentionedUser.username} is currently **AFK** - ${elapsed}\nReason: ${afkData.reason}`
           );
         }
       }
