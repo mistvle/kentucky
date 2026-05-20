@@ -35,7 +35,7 @@ module.exports = {
         const user = interaction.options.getUser("user");
         const rating = interaction.options.getString("rating");
         const feedback = interaction.options.getString("feedback");
-        const channel = interaction.guild.channels.cache.get("1506125788607549644");
+        const channel = interaction.guild.channels.cache.get("1226775346037260338");
         await user.send({
   "flags": 32768,
   "components": [
