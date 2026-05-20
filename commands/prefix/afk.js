@@ -29,7 +29,7 @@ module.exports = {
             expires: Date.now() + duration
         });
 
-        message.reply(`<:check:1506513370625347816> You've been marked as AFK for ${duration} - ${reason}.`);
+        message.reply(`<:check:1506513370625347816> You've been marked as AFK for ${timeInput} - ${reason}.`);
 
         setTimeout(() => {
             if (message.client.afk.has(message.author.id)) {
