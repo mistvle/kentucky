@@ -8,10 +8,10 @@ module.exports = {
 
     // ================= AFK REMOVE =================
     if (
-  client.afk?.has(message.author.id) &&
-  !message.content.startsWith(`${client.prefix}afk`) &&
-  !message.mentions.users.has(message.author.id)
-) {
+      client.afk?.has(message.author.id) &&
+      !message.content.startsWith(`${client.prefix}afk`) &&
+      !message.mentions.users.has(message.author.id)
+    ) {
 
       client.afk.delete(message.author.id);
 
@@ -48,17 +48,23 @@ module.exports = {
 
           client.afk.delete(mentionedUser.id);
 
-          await mentionedUser.send(
-            "<:bell:1506530215223099412> Your AFK status has ended."
-          ).catch(() => {});
+          const member = await message.client.users
+            .fetch(mentionedUser.id)
+            .catch(() => null);
+
+          if (member) {
+            await member.send(
+              "<:bell:1506530215223099412> Your AFK status has ended."
+            ).catch(() => {});
+          }
 
         } else {
 
           const remaining = `<t:${Math.floor(afkData.expires / 1000)}:R>`;
 
-await message.reply(
-  `<:dnd:1506531236871409694> ${mentionedUser.username} is currently **AFK** - ${afkData.reason}, ends in ${remaining}.`
-);
+          await message.reply(
+            `<:dnd:1506531236871409694> ${mentionedUser.username} is currently **AFK** - ${afkData.reason}, ends in ${remaining}.`
+          );
         }
       }
     }
