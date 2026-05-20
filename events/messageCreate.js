@@ -1,8 +1,52 @@
+const ms = require("ms");
+
 module.exports = {
   name: "messageCreate",
 
   async execute(client, message) {
     if (message.author.bot) return;
+
+    // ================= AFK REMOVE =================
+    if (client.afk?.has(message.author.id)) {
+      client.afk.delete(message.author.id);
+
+      await message.reply("Welcome back, your AFK has been removed.");
+    }
+
+    // ================= AFK CHECK =================
+    let mentionedUser = message.mentions.users.first();
+
+    // replies
+    if (!mentionedUser && message.reference) {
+      const repliedMsg = await message.channel.messages
+        .fetch(message.reference.messageId)
+        .catch(() => null);
+
+      if (repliedMsg) {
+        mentionedUser = repliedMsg.author;
+      }
+    }
+
+    if (mentionedUser) {
+      const afkData = client.afk?.get(mentionedUser.id);
+
+      if (afkData) {
+
+        // expired
+        if (Date.now() > afkData.expires) {
+          client.afk.delete(mentionedUser.id);
+        } else {
+
+          const elapsed = ms(Date.now() - afkData.since, { long: true });
+
+          await message.reply(
+            `${mentionedUser.username} is currently **AFK** - ${elapsed}\nReason: ${afkData.reason}`
+          );
+        }
+      }
+    }
+
+    // ================= PREFIX COMMANDS =================
     if (!message.content.startsWith(client.prefix)) return;
 
     const args = message.content.slice(client.prefix.length).trim().split(/ +/);

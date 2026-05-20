@@ -11,7 +11,7 @@ module.exports = {
         const msg = await message.reply("<a:loading:1506527267818569749> Restarting...")
         setTimeout(async () => {
     await msg.edit({
-        content: "~~<a:loading:1506527267818569749> Restaring.~~\n<:check:1506513370625347816> Successfully restarted bot."
+        content: "~~<a:loading:1506527267818569749> Restarting.~~\n<:check:1506513370625347816> Successfully restarted bot."
     });
 }, 5000);
     }
