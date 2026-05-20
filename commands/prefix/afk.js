@@ -20,11 +20,11 @@ if (args[0]?.toLowerCase() === "end") {
     message.client.afk.delete(message.author.id);
 
     await message.author.send(
-        "<:bell:1506530215223099412> Your AFK status has ended."
+        "<:bell:1506530215223099412> Welcome back, your AFK status has been removed."
     ).catch(() => {});
 
     return message.reply(
-        "<:check:1506513370625347816> Your AFK status has been removed."
+        "<:check:1506513370625347816> Welcome back, your AFK status has been removed."
     );
 }
 
