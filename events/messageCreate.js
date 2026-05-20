@@ -7,10 +7,15 @@ module.exports = {
     if (message.author.bot) return;
 
     // ================= AFK REMOVE =================
-    if (client.afk?.has(message.author.id)) {
+    if (
+      client.afk?.has(message.author.id) &&
+      !message.content.startsWith(`${client.prefix}afk`)
+    ) {
       client.afk.delete(message.author.id);
 
-      await message.reply("Welcome back, your AFK has been removed.");
+      await message.reply(
+        "<:check:1506513370625347816> Welcome back, your AFK has been removed."
+      );
     }
 
     // ================= AFK CHECK =================
@@ -40,7 +45,7 @@ module.exports = {
           const elapsed = ms(Date.now() - afkData.since, { long: true });
 
           await message.reply(
-            `<:dnd:1506529404786970634> ${mentionedUser.username} is currently **AFK** - ${elapsed}\nReason: ${afkData.reason}`
+            `${mentionedUser.username} is currently **AFK** - ${elapsed}\nReason: ${afkData.reason}`
           );
         }
       }
@@ -49,7 +54,11 @@ module.exports = {
     // ================= PREFIX COMMANDS =================
     if (!message.content.startsWith(client.prefix)) return;
 
-    const args = message.content.slice(client.prefix.length).trim().split(/ +/);
+    const args = message.content
+      .slice(client.prefix.length)
+      .trim()
+      .split(/ +/);
+
     const cmdName = args.shift().toLowerCase();
 
     const cmd = client.prefixCommands.get(cmdName);

@@ -5,22 +5,40 @@ module.exports = {
 
     async execute(message, args) {
 
+        // create collection if missing
+        if (!message.client.afk) {
+            message.client.afk = new Map();
+        }
+
+        // ================= END AFK =================
+        if (args[0]?.toLowerCase() === "end") {
+
+            if (!message.client.afk.has(message.author.id)) {
+                return message.reply("<:xMark:1506513418470035467> You are not currently AFK.");
+            }
+
+            message.client.afk.delete(message.author.id);
+
+            return message.reply("<:check:1506513370625347816> Your AFK status has been removed.");
+        }
+
+        // ================= SET AFK =================
         const timeInput = args[0];
+
         if (!timeInput) {
-            return message.reply("<:xMark:1506513418470035467> Please provide a valid duration (.e.g 5m).");
+            return message.reply("<:xMark:1506513418470035467> Please provide a valid duration (e.g. 5m).");
         }
 
         const duration = ms(timeInput);
 
         if (!duration) {
-            return message.reply("<:xMark:1506513418470035467> Please provied a valid duration (e.g. 5m).");
+            return message.reply("<:xMark:1506513418470035467> Please provide a valid duration (e.g. 5m).");
         }
 
-        const reason = args.slice(1).join(" ") || "<:xMark:1506513418470035467> Please provide a reason for your AFK.";
+        const reason = args.slice(1).join(" ");
 
-        // create collection if missing
-        if (!message.client.afk) {
-            message.client.afk = new Map();
+        if (!reason) {
+            return message.reply("<:xMark:1506513418470035467> Please provide a reason for your AFK.");
         }
 
         message.client.afk.set(message.author.id, {
@@ -29,7 +47,9 @@ module.exports = {
             expires: Date.now() + duration
         });
 
-        message.reply(`<:check:1506513370625347816> You've been marked as AFK for ${timeInput} - ${reason}.`);
+        message.reply(
+            `<:check:1506513370625347816> You've been marked as AFK for ${ms(duration, { long: true })} - ${reason}.`
+        );
 
         setTimeout(() => {
             if (message.client.afk.has(message.author.id)) {
