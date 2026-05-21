@@ -12,6 +12,7 @@ const client = new Client({
 });
 
 client.prefix = "-";
+const db = require("./db");
 
 // collections
 client.prefixCommands = new Collection();
@@ -19,6 +20,8 @@ client.slashCommands = new Collection();
 client.buttons = new Collection();
 client.menus = new Collection();
 client.modals = new Collection();
+client.db = db;
+
 
 // afk
 client.afk = new Map();
