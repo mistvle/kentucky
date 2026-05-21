@@ -20,6 +20,9 @@ client.buttons = new Collection();
 client.menus = new Collection();
 client.modals = new Collection();
 
+// afk
+client.afk = new Map();
+
 // handlers
 require("./handlers/commandHandler")(client);
 require("./handlers/eventHandler")(client);
