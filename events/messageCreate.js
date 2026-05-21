@@ -42,14 +42,23 @@ module.exports = {
 
         } else {
 
-          const remaining = `<t:${Math.floor(afkData.expires / 1000)}:R>`;
+          const remainingMs = afkData.expires - Date.now();
 
-          await message.reply(
-            `<:dnd:1506531236871409694> ${mentionedUser.username} is currently **AFK** - ${afkData.reason}, ends in ${remaining}.`
-          );
-        }
-      }
-    }
+const hours = Math.floor(remainingMs / (1000 * 60 * 60));
+const minutes = Math.floor((remainingMs % (1000 * 60 * 60)) / (1000 * 60));
+
+let remaining;
+
+if (hours > 0) {
+  remaining = `${hours}h ${minutes}m`;
+} else {
+  remaining = `${minutes}m`;
+}
+
+await message.reply(
+  `<:dnd:1506531236871409694> ${mentionedUser.username} is currently **AFK** - ${afkData.reason}, ends in ${remaining}.`
+);
+
 
     // ================= PREFIX COMMANDS =================
     if (!message.content.startsWith(client.prefix)) return;

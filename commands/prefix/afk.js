@@ -57,10 +57,21 @@ if (args[0]?.toLowerCase() === "end") {
             `<:check:1506513370625347816> You've been marked as AFK for ${ms(duration, { long: true })} - ${reason}.`
         );
 
-        setTimeout(() => {
-            if (message.client.afk.has(message.author.id)) {
-                message.client.afk.delete(message.author.id);
-            }
-        }, duration);
+        setTimeout(async () => {
+
+    const afkData = message.client.afk.get(message.author.id);
+
+    if (!afkData) return;
+
+    if (Date.now() >= afkData.expires) {
+
+        message.client.afk.delete(message.author.id);
+
+        await message.author.send(
+            "<:bell:1506530215223099412> Welcome back, your AFK status has been removed."
+        ).catch(() => {});
+    }
+
+}, duration);
     }
 };
