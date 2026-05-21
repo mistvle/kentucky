@@ -22,7 +22,7 @@ module.exports = {
   "components": [
     {
       "type": 10,
-      "content": "<:bell:1506530215223099412> @curently moderating Ensure to conduct Discord checks to avoid receiving a negative review or an infraction."
+      "content": "<:bell:1506530215223099412> <@&1229653813686960129> Ensure to conduct Discord checks to avoid receiving a negative evaluation or an infraction."
     }
   ]
 });
