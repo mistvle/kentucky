@@ -10,7 +10,7 @@ module.exports = {
         .addSubcommand(subcommand =>
             subcommand
                 .setName("issue")
-                .setDescription("Issue a blacklist.")
+                .setDescription("Issue a staff blacklist.")
                 .addUserOption(option =>
                     option
                         .setName("user")
