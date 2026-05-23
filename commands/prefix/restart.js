@@ -2,7 +2,7 @@ module.exports = {
     name: 'restart',
 
     async execute (message, args) {
-        const ALLOWED_USER_ID = 123456789012345678;
+        const ALLOWED_USER_ID = "1499915565538611401";
 
 if (message.author.id !== ALLOWED_USER_ID) {
     return message.reply({
