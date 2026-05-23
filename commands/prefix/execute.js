@@ -27,7 +27,7 @@ module.exports = {
         try {
 
             await axios.post(
-                "https://api.policeroleplay.community/v1/server/command",
+                "https://api.erlc.gg/v1/server/command",
                 {
                     command: command
                 },

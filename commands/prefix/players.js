@@ -8,7 +8,7 @@ module.exports = {
         try {
 
             const response = await axios.get(
-                "https://api.policeroleplay.community/v1/server/players",
+                "https://api.erlc.gg/v1/server/players",
                 {
                     headers: {
                         "Server-Key": process.env.ERLC_API_KEY
