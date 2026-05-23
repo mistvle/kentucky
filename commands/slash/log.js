@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, AutoModerationRuleEventType} = require("discord.js");
+const { SlashCommandBuilder, AutoModerationRuleEventType, IntegrationApplication} = require("discord.js");
 module.exports = {
     data: new SlashCommandBuilder()
     .setName("log")
@@ -87,6 +87,41 @@ const hasRoles = REQUIRED_ROLE_IDS.some(roleId =>
       ]
     }
   ]
-})
+});
+
+    if (result === "Passed") {
+        await user.roles.add([
+            "1226029621687095296",
+            "1274573950751342592",
+            "1226553268948435086",
+            "1226480378521452594",
+            "1266457792412254298",
+            "1229917052131868773"
+        ])
+
+        await user.roles.remove(
+            "1346266516781404201",
+            "1226007098832326717",
+            "1226553268948435086",
+            "1226757206163193856",
+            "1268079347567431741",
+            "1478545277161050325",
+            '1229917052131868773'
+        )
+        await user.send("<:bell:1506530215223099412> **Congratulations**, you have passed your R/A & have been promoted to **Junior Moderator.**")
+    }
+    if (result === "Failed") {
+        await user.roles.remove(
+            "1346266516781404201",
+            "1226007098832326717",
+            "1226553268948435086",
+            "1226757206163193856",
+            "1268079347567431741",
+            "1478545277161050325",
+            '1229917052131868773'
+        )
+        await user.send("<:bell:1506530215223099412> Unfortunately, you have failed your R/A.")
+    }
+    await interaction.reply({content: "<:check:1506513370625347816> **Successfully** logged ride along."})
     }
 }
