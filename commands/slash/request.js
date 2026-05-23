@@ -9,7 +9,7 @@ module.exports = {
     ),
     async execute (interaction) {
         const hasRole = interaction.member.roles.cache.has("1268079347567431741");
-        const isAdmin = interaction.permissions.has("Administrator");
+        const isAdmin = interaction.member.permissions.has("Administrator");
         if (!hasRole && !isAdmin) {
             return interaction.reply({content: "<:fsco_xMark:1506499171509866516> You do not have permission to run this command."})
 
