@@ -1,11 +1,10 @@
-const Database = require("better-sqlite3");
-
 const path = require("path");
-const Database = require("better-sqlite3");
+const BetterSqlite3 = require("better-sqlite3");
 
-const db = new Database(
+const db = new BetterSqlite3(
     path.join(__dirname, "data", "database.sqlite")
 );
+
 // ================= INFRACTIONS =================
 db.prepare(`
 CREATE TABLE IF NOT EXISTS infractions (
