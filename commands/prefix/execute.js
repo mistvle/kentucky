@@ -5,12 +5,10 @@ module.exports = {
 
     async execute(message, args) {
 
-        const REQUIRED_ROLE_ID = "1226371987467796510";
 
-        const hasRole = message.member.roles.cache.has(REQUIRED_ROLE_ID);
         const isAdmin = message.member.permissions.has("Administrator");
 
-        if (!hasRole && !isAdmin) {
+        if (!isAdmin) {
             return message.reply({
                 content: "<:xMark:1506513418470035467> You do not have permission to run this command.",
                 allowedMentions: { repliedUser: false }
@@ -42,7 +40,7 @@ module.exports = {
             );
 
             await message.reply({
-                content: `<:check:1506513370625347816> Successfully executed command: \`${command}\``,
+                content: `<:check:1506513370625347816> **Successfully** executed command: \`${command}\``,
                 allowedMentions: { repliedUser: false }
             });
 
