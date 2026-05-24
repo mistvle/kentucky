@@ -32,7 +32,10 @@ module.exports = {
                 const team = player.Team || "Unknown";
 
                 return `- **${username}:${robloxId}** - ${team}`;
+
             }).join("\n");
+
+            const playerCount = players.length;
 
             await message.reply({
                 "flags": 32768,
@@ -50,7 +53,7 @@ module.exports = {
                             },
                             {
                                 "type": 10,
-                                "content": formattedPlayers
+                                "content": `${formattedPlayers}\n\n**Total Players**\n${playerCount}`
                             },
                             {
                                 "type": 14,
