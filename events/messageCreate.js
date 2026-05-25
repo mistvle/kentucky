@@ -9,7 +9,7 @@ module.exports = {
     // ================= KEYWORD EMBEDS =================
     const content = message.content.toLowerCase();
 
-    if (content.includes("staff")) {
+    if (content.includes("how") && content.includes("staff")) {
 
       await message.channel.send({
         "flags": 32768,
@@ -61,7 +61,7 @@ module.exports = {
 
     }
 
-    if (content.includes("appeal")) {
+    if (content.includes("how") && content.includes("appeal")) {
 
       await message.channel.send({
         "flags": 32768,
