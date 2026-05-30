@@ -8,8 +8,8 @@ module.exports = {
         // ISSUE
         .addSubcommand(subcommand =>
             subcommand
-                .setName("issue")
-                .setDescription("Issue an infraction.")
+                .setName("request")
+                .setDescription("Request approval for an infraction.")
                 .addUserOption(option =>
                     option
                         .setName("user")
@@ -83,7 +83,7 @@ module.exports = {
         const sub = interaction.options.getSubcommand();
 
         // ================= ISSUE =================
-        if (sub === "issue") {
+        if (sub === "request") {
 
             const user = interaction.options.getUser("user");
             const type = interaction.options.getString("type");
@@ -113,94 +113,86 @@ module.exports = {
 
             const id = result.lastInsertRowid;
 
-            // TERMINATION ROLE REMOVE
-            if (type === "Termination") {
 
-                await member.roles.remove([
-                    "ROLE_ID_1",
-                    "ROLE_ID_2"
-                ]).catch(() => null);
-
-            }
-
-            const logChannel = interaction.guild.channels.cache.get("1226775174238568519");
+            const logChannel = interaction.guild.channels.cache.get("1497627562954719383");
 
             await logChannel.send({
-                "flags": 32768,
-                "components": [
-                    {
-                        "type": 17,
-                        "components": [
-                            {
-                                "type": 10,
-                                "content": "# <:shield:1507893287569199104> Infraction Issued"
-                            },
-                            {
-                                "type": 14,
-                                "spacing": 2
-                            },
-                            {
-                                "type": 10,
-                                "content": `An infraction has been issued by ${interaction.user}. View information regarding it below.\n\n<:person:1506523692920737822> **User:** ${user}\n<:pin:1506523961356320820> **Type:** ${type}\n<:clipboard:1506523825817391136> **Reason:** ${reason}\n- <:briefcase:1506523492747579424> **ID:** ${id}`
-                            },
-                            {
-                                "type": 14,
-                                "spacing": 2
-                            },
-                            {
-                                "type": 12,
-                                "items": [
-                                    {
-                                        "media": {
-                                            "url": "https://media.discordapp.net/attachments/1505376044474040440/1505728623922122795/Footers_55.png?ex=6a12eecf&is=6a119d4f&hm=a9ec55994346800496d8b9dc8bdfd398afe93f8cc1bf25bdc0d50dc6d675ef95&=&format=webp&quality=lossless&width=2116&height=108"
-                                        }
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                ]
-            });
+  "flags": 32768,
+  "components": [
+    {
+      "type": 17,
+      "components": [
+        {
+          "type": 10,
+          "content": "# <:bell:1506530215223099412> Infraction Approval\n-# <@&1226052335474839602>"
+        },
+        {
+          "type": 14,
+          "spacing": 2
+        },
+        {
+          "type": 10,
+          "content": "An Infraction has been sent for approval by ${interaction.user}.\n\n<:person:1506523692920737822> **User:** ${user}\n<:pin:1506523961356320820> **Type:** ${type}\n<:clipboard:1506523825817391136> **Reason:** ${reason}"
+        },
+        {
+          "type": 14,
+          "divider": false
+        },
+        {
+          "type": 1,
+          "components": [
+            {
+              "style": 3,
+              "type": 2,
+              "label": "Approve",
+              "emoji": {
+                "id": "1506513370625347816",
+                "name": "check",
+                "animated": false
+              },
+              "custom_id": `infraction_approve_${id}`,
+              "flow": {
+                "actions": []
+              }
+            },
+            {
+              "style": 4,
+              "type": 2,
+              "label": "Deny",
+              "emoji": {
+                "id": "1506513418470035467",
+                "name": "xMark",
+                "animated": false
+              },
+              "custom_id": `infraction_deny_${id}`,
+              "flow": {
+                "actions": []
+              }
+            }
+          ]
+        },
+        {
+          "type": 14,
+          "spacing": 2
+        },
+        {
+          "type": 12,
+          "items": [
+            {
+              "media": {
+                "url": "https://media.discordapp.net/attachments/1505376044474040440/1505728623922122795/Footers_55.png?ex=6a1ad7cf&is=6a19864f&hm=80c27d77c673cd9b9cae9e65deac84d955ec37161ca0fe040812c4fff1466b38&=&format=webp&quality=lossless"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+});
 
-            await user.send({
-                "flags": 32768,
-                "components": [
-                    {
-                        "type": 17,
-                        "components": [
-                            {
-                                "type": 10,
-                                "content": "# <:shield:1507893287569199104> Infraction Issued"
-                            },
-                            {
-                                "type": 14,
-                                "spacing": 2
-                            },
-                            {
-                                "type": 10,
-                                "content": `An infraction has been issued to you. View information regarding it below.\n\n<:pin:1506523961356320820> **Type:** ${type}\n<:clipboard:1506523825817391136> **Reason:** ${reason}\n- <:briefcase:1506523492747579424> **ID:** ${id}`
-                            },
-                            {
-                                "type": 14,
-                                "spacing": 2
-                            },
-                            {
-                                "type": 12,
-                                "items": [
-                                    {
-                                        "media": {
-                                            "url": "https://media.discordapp.net/attachments/1505376044474040440/1505728623922122795/Footers_55.png?ex=6a12eecf&is=6a119d4f&hm=a9ec55994346800496d8b9dc8bdfd398afe93f8cc1bf25bdc0d50dc6d675ef95&=&format=webp&quality=lossless&width=2116&height=108"
-                                        }
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                ]
-            }).catch(() => null);
 
             await interaction.reply({
-                content: `<:check:1506513370625347816> **Successfully** issued infraction **#${id}** to ${user}.`,
+                content: `<:check:1506513370625347816> **Successfully** requested approval for infraction **#${id}** to ${user}.`,
                 flags: 64
             });
         }

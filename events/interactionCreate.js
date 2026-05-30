@@ -9,10 +9,21 @@ module.exports = {
       }
 
       if (interaction.isButton()) {
-        const btn = client.buttons.get(interaction.customId);
-        if (btn) await btn.execute(interaction);
-      }
 
+  let btn = client.buttons.get(interaction.customId);
+
+  if (!btn) {
+    if (interaction.customId.startsWith("infraction_approve_")) {
+      btn = client.buttons.get("infraction_approve");
+    }
+
+    if (interaction.customId.startsWith("infraction_deny_")) {
+      btn = client.buttons.get("infraction_deny");
+    }
+  }
+
+  if (btn) await btn.execute(interaction);
+}
       if (interaction.isStringSelectMenu()) {
         const menu = client.menus.get(interaction.customId);
         if (menu) await menu.execute(interaction);
