@@ -132,7 +132,7 @@ module.exports = {
         },
         {
           "type": 10,
-          "content": "An Infraction has been sent for approval by ${interaction.user}.\n\n<:person:1506523692920737822> **User:** ${user}\n<:pin:1506523961356320820> **Type:** ${type}\n<:clipboard:1506523825817391136> **Reason:** ${reason}"
+          "content": `An Infraction has been sent for approval by ${interaction.user}.\n\n<:person:1506523692920737822> **User:** ${user}\n<:pin:1506523961356320820> **Type:** ${type}\n<:clipboard:1506523825817391136> **Reason:** ${reason}`
         },
         {
           "type": 14,
