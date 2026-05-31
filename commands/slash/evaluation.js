@@ -14,7 +14,7 @@ module.exports = {
         )
         .addStringOption(option => option
             .setName("rating")
-            .setDescription("Select the rating of the evaluation (1-5).")
+            .setDescription("Select the rating of the evaluation (1-10).")
             .setRequired(true)
 
         )
