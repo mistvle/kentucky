@@ -49,6 +49,20 @@ module.exports = {
 **User:** <@${infraction.user_id}>
 **Type:** ${infraction.type}
 **Reason:** ${infraction.reason}`
+                    },
+                    {
+                        type: 14,
+                        spacing: 2
+                    },
+                    {
+                        type: 12,
+                        items: [
+                            {
+                                media: {
+                                    url: "https://media.discordapp.net/attachments/1505376044474040440/1505728623922122795/Footers_55.png?ex=6a1b808f&is=6a1a2f0f&hm=ac4b5d0095d395f14cb6b79008cd715cf605b7df7af5feb2f5dca0271c7013db&=&format=webp&quality=lossless"
+                                }
+                            }
+                        ]
                     }
                 ]
             }]
@@ -78,6 +92,20 @@ module.exports = {
 **User:** <@${infraction.user_id}>
 **Type:** ${infraction.type}
 **Reason:** ${infraction.reason}`
+                    },
+                    {
+                        type: 14,
+                        spacing: 2
+                    },
+                    {
+                        type: 12,
+                        items: [
+                            {
+                                media: {
+                                    url: "https://media.discordapp.net/attachments/1505376044474040440/1505728623922122795/Footers_55.png?ex=6a1b808f&is=6a1a2f0f&hm=ac4b5d0095d395f14cb6b79008cd715cf605b7df7af5feb2f5dca0271c7013db&=&format=webp&quality=lossless"
+                                }
+                            }
+                        ]
                     }
                 ]
             }]
@@ -94,27 +122,29 @@ module.exports = {
             }]
         }).catch(() => {});
 
-        await interaction.update({
-            components: [{
-                type: 1,
-                components: [
-                    {
-                        type: 2,
-                        style: 3,
-                        label: "Approve",
-                        disabled: true,
-                        custom_id: "disabled"
-                    },
-                    {
-                        type: 2,
-                        style: 4,
-                        label: "Deny",
-                        disabled: true,
-                        custom_id: "disabled"
+        const data = JSON.parse(JSON.stringify(interaction.message.components));
+
+        for (const row of data) {
+            if (row.components) {
+                for (const component of row.components) {
+                    if (component.type === 2) {
+                        component.disabled = true;
                     }
-                ]
-            }]
+                }
+            }
+        }
+
+        if (data[0]) {
+            data[0].accent_color = 5763719; // Discord Green
+        }
+
+        await interaction.update({
+            components: data
         });
-        await interaction.reply({content: "<:check:1506513370625347816> **Successfully** accepted infraction request."})
+
+        await interaction.followUp({
+            content: "<:check:1506513370625347816> **Successfully** accepted infraction request.",
+            flags: 64
+        });
     }
 };

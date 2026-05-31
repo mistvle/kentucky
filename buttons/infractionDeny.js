@@ -40,28 +40,29 @@ module.exports = {
             }]
         }).catch(() => {});
 
-        await interaction.update({
-            components: [{
-                type: 1,
-                components: [
-                    {
-                        type: 2,
-                        style: 3,
-                        label: "Approve",
-                        disabled: true,
-                        custom_id: "disabled"
-                    },
-                    {
-                        type: 2,
-                        style: 4,
-                        label: "Deny",
-                        disabled: true,
-                        custom_id: "disabled"
+        const data = JSON.parse(JSON.stringify(interaction.message.components));
+
+        for (const row of data) {
+            if (row.components) {
+                for (const component of row.components) {
+                    if (component.type === 2) {
+                        component.disabled = true;
                     }
-                ]
-            }]
+                }
+            }
+        }
+
+        if (data[0]) {
+            data[0].accent_color = 15548997; // Discord Red
+        }
+
+        await interaction.update({
+            components: data
         });
 
-        await interaction.reply({content: "<:check:1506513370625347816> **Successfully** denied infraction request.", flags: 64})
+        await interaction.followUp({
+            content: "<:check:1506513370625347816> **Successfully** denied infraction request.",
+            flags: 64
+        });
     }
 };
