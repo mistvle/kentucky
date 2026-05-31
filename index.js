@@ -22,7 +22,7 @@ client.menus = new Collection();
 client.modals = new Collection();
 client.db = db;
 
-
+client.reminderInterval = null;
 // afk
 client.afk = new Map();
 
