@@ -22,6 +22,19 @@ module.exports = {
             });
         }
 
+        db.prepare(`
+            UPDATE infractions
+            SET
+                approved = 1,
+                approved_by = ?,
+                approved_at = ?
+            WHERE id = ?
+        `).run(
+            interaction.user.id,
+            Date.now(),
+            id
+        );
+
         const targetUser = await interaction.client.users
             .fetch(infraction.user_id)
             .catch(() => null);
@@ -50,7 +63,8 @@ module.exports = {
 
 **User:** <@${infraction.user_id}>
 **Type:** ${infraction.type}
-**Reason:** ${infraction.reason}`
+**Reason:** ${infraction.reason}
+**Proof:** ${infraction.proof || "N/A"}`
                     },
                     {
                         type: 14,
@@ -61,7 +75,7 @@ module.exports = {
                         items: [
                             {
                                 media: {
-                                    url: "https://media.discordapp.net/attachments/1505376044474040440/1505728623922122795/Footers_55.png?ex=6a1b808f&is=6a1a2f0f&hm=ac4b5d0095d395f14cb6b79008cd715cf605b7df7af5feb2f5dca0271c7013db&=&format=webp&quality=lossless"
+                                    url: "https://media.discordapp.net/attachments/1505376044474040440/1505728623922122795/Footers_55.png"
                                 }
                             }
                         ]
@@ -73,14 +87,17 @@ module.exports = {
         const logChannel =
             interaction.guild.channels.cache.get("1226775174238568519");
 
-        await logChannel.send({
+        const issuedMessage = await logChannel.send({
             flags: 32768,
             components: [{
                 type: 17,
+                accent_color: 5763719,
                 components: [
                     {
                         type: 10,
-                        content: `# <:shield:1507893287569199104> Infraction Issued - ${id}`
+                        content:
+`# <:shield:1507893287569199104> Infraction Issued - ${id}
+-# Approved by ${interaction.user.username}`
                     },
                     {
                         type: 14,
@@ -93,7 +110,8 @@ module.exports = {
 
 **User:** <@${infraction.user_id}>
 **Type:** ${infraction.type}
-**Reason:** ${infraction.reason}`
+**Reason:** ${infraction.reason}
+**Proof:** ${infraction.proof || "N/A"}`
                     },
                     {
                         type: 14,
@@ -104,7 +122,7 @@ module.exports = {
                         items: [
                             {
                                 media: {
-                                    url: "https://media.discordapp.net/attachments/1505376044474040440/1505728623922122795/Footers_55.png?ex=6a1b808f&is=6a1a2f0f&hm=ac4b5d0095d395f14cb6b79008cd715cf605b7df7af5feb2f5dca0271c7013db&=&format=webp&quality=lossless"
+                                    url: "https://media.discordapp.net/attachments/1505376044474040440/1505728623922122795/Footers_55.png"
                                 }
                             }
                         ]
@@ -112,6 +130,18 @@ module.exports = {
                 ]
             }]
         });
+
+        db.prepare(`
+            UPDATE infractions
+            SET
+                issued_message_id = ?,
+                issued_channel_id = ?
+            WHERE id = ?
+        `).run(
+            issuedMessage.id,
+            issuedMessage.channel.id,
+            id
+        );
 
         await requester?.send({
             flags: 32768,
@@ -124,22 +154,43 @@ module.exports = {
             }]
         }).catch(() => {});
 
-        const data = interaction.message.components.map(row => ({
-            ...row.data,
-            components: row.components?.map(component => ({
-                ...component.data,
-                disabled: component.data.type === 2
-                    ? true
-                    : component.data.disabled
-            }))
-        }));
+        const data = JSON.parse(JSON.stringify(interaction.message.components));
+
+        if (data[0]) {
+            data[0].accent_color = 5763719;
+        }
+
+        for (const component of data[0].components) {
+
+            if (
+                component.type === 1 &&
+                component.components
+            ) {
+
+                component.components = [
+                    {
+                        type: 2,
+                        style: 3,
+                        label: `Approved by ${interaction.user.username}`,
+                        disabled: true,
+                        custom_id: `approved_${id}`
+                    },
+                    {
+                        type: 2,
+                        style: 1,
+                        label: "Edit",
+                        custom_id: `infraction_edit_${id}`
+                    }
+                ];
+            }
+        }
 
         await interaction.message.edit({
             components: data
         });
 
         await interaction.followUp({
-            content: "<:check:1506513370625347816> **Successfully** accepted infraction request.",
+            content: "<:check:1506513370625347816> Successfully accepted infraction request.",
             flags: 64
         });
     }

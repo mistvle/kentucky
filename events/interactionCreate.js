@@ -10,19 +10,23 @@ module.exports = {
 
       if (interaction.isButton()) {
 
-  let btn = client.buttons.get(interaction.customId);
+    let btn = client.buttons.get(interaction.customId);
 
-  if (!btn) {
-    if (interaction.customId.startsWith("infraction_approve_")) {
-      btn = client.buttons.get("infraction_approve");
+    if (!btn) {
+        if (interaction.customId.startsWith("infraction_approve_")) {
+            btn = client.buttons.get("infraction_approve");
+        }
+
+        if (interaction.customId.startsWith("infraction_deny_")) {
+            btn = client.buttons.get("infraction_deny");
+        }
+
+        if (interaction.customId.startsWith("infraction_edit_")) {
+            btn = client.buttons.get("infraction_edit");
+        }
     }
 
-    if (interaction.customId.startsWith("infraction_deny_")) {
-      btn = client.buttons.get("infraction_deny");
-    }
-  }
-
-  if (btn) await btn.execute(interaction);
+    if (btn) await btn.execute(interaction);
 }
       if (interaction.isStringSelectMenu()) {
         const menu = client.menus.get(interaction.customId);
@@ -30,9 +34,17 @@ module.exports = {
       }
 
       if (interaction.isModalSubmit()) {
-        const modal = client.modals.get(interaction.customId);
-        if (modal) await modal.execute(interaction);
-      }
+
+    let modal = client.modals.get(interaction.customId);
+
+    if (!modal) {
+        if (interaction.customId.startsWith("infraction_edit_modal_")) {
+            modal = client.modals.get("infraction_edit_modal");
+        }
+    }
+
+    if (modal) await modal.execute(interaction);
+}
 
     } catch (err) {
       console.error(err);

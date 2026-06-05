@@ -41,6 +41,7 @@ module.exports = {
                     .setDescription("Input any links to videos of proof for the infraction.")
                     .setRequired(true)
                 )
+                
         )
 
         // VIEW
@@ -67,7 +68,30 @@ module.exports = {
                         .setDescription("Provide the infraction ID.")
                         .setRequired(true)
                 )
-        ),
+        )
+        .addSubcommand(subcommand =>
+    subcommand
+        .setName("void")
+        .setDescription("Void an infraction.")
+        .addIntegerOption(option =>
+            option
+                .setName("id")
+                .setDescription("Provide the infraction ID.")
+                .setRequired(true)
+        )
+)
+
+.addSubcommand(subcommand =>
+    subcommand
+        .setName("unvoid")
+        .setDescription("Unvoid an infraction.")
+        .addIntegerOption(option =>
+            option
+                .setName("id")
+                .setDescription("Provide the infraction ID.")
+                .setRequired(true)
+        )
+),
 
     async execute(interaction) {
 
@@ -133,7 +157,7 @@ VALUES (?, ?, ?, ?, ?)
 
             const logChannel = interaction.guild.channels.cache.get("1497627562954719383");
 
-            await logChannel.send({
+            const approvalMessage = await logChannel.send({
   "flags": 32768,
   "components": [
     {
@@ -302,5 +326,80 @@ VALUES (?, ?, ?, ?, ?)
                 flags: 64
             });
         }
+        // ================= VOID =================
+if (sub === "void") {
+
+    const id = interaction.options.getInteger("id");
+
+    const infraction = db.prepare(`
+        SELECT *
+        FROM infractions
+        WHERE id = ?
+    `).get(id);
+
+    if (!infraction) {
+        return interaction.reply({
+            content: "<:xMark:1506513418470035467> Invalid infraction ID.",
+            flags: 64
+        });
+    }
+
+    db.prepare(`
+        UPDATE infractions
+        SET voided = 1
+        WHERE id = ?
+    `).run(id);
+
+    const targetUser = await interaction.client.users
+        .fetch(infraction.user_id)
+        .catch(() => null);
+
+    await targetUser?.send({
+        content: `Infraction #${id} has been voided.`
+    }).catch(() => {});
+
+    await interaction.reply({
+        content: `<:check:1506513370625347816> Successfully voided infraction **#${id}**.`,
+        flags: 64
+    });
+}
+
+// ================= UNVOID =================
+if (sub === "unvoid") {
+
+    const id = interaction.options.getInteger("id");
+
+    const infraction = db.prepare(`
+        SELECT *
+        FROM infractions
+        WHERE id = ?
+    `).get(id);
+
+    if (!infraction) {
+        return interaction.reply({
+            content: "<:xMark:1506513418470035467> Invalid infraction ID.",
+            flags: 64
+        });
+    }
+
+    db.prepare(`
+        UPDATE infractions
+        SET voided = 0
+        WHERE id = ?
+    `).run(id);
+
+    const targetUser = await interaction.client.users
+        .fetch(infraction.user_id)
+        .catch(() => null);
+
+    await targetUser?.send({
+        content: `Infraction #${id} has been unvoided.`
+    }).catch(() => {});
+
+    await interaction.reply({
+        content: `<:check:1506513370625347816> Successfully unvoided infraction **#${id}**.`,
+        flags: 64
+    });
+}
     }
 };
