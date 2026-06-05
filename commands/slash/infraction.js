@@ -36,6 +36,11 @@ module.exports = {
                         .setDescription("Provide a reason.")
                         .setRequired(true)
                 )
+                .addStringOption(option => option
+                    .setName('proof')
+                    .setDescription("Input any links to videos of proof for the infraction.")
+                    .setRequired(true)
+                )
         )
 
         // VIEW
@@ -88,6 +93,7 @@ module.exports = {
             const user = interaction.options.getUser("user");
             const type = interaction.options.getString("type");
             const reason = interaction.options.getString("reason");
+            const proof = interaction.options.getString("proof");
 
             const member = await interaction.guild.members
                 .fetch(user.id)
@@ -100,18 +106,29 @@ module.exports = {
                 });
             }
 
-            const result = db.prepare(`
-                INSERT INTO infractions
-                (user_id, moderator_id, type, reason)
-                VALUES (?, ?, ?, ?)
-            `).run(
-                user.id,
-                interaction.user.id,
-                type,
-                reason
-            );
+            const nextId = db.prepare(`
+    SELECT COALESCE(MAX(id), 0) + 1 AS id
+    FROM infractions
+`).get().id;
 
-            const id = result.lastInsertRowid;
+db.prepare(`
+INSERT INTO infractions (
+    id,
+    user_id,
+    moderator_id,
+    type,
+    reason
+)
+VALUES (?, ?, ?, ?, ?)
+`).run(
+    nextId,
+    user.id,
+    interaction.user.id,
+    type,
+    reason
+);
+
+            const id = nextId;
 
 
             const logChannel = interaction.guild.channels.cache.get("1497627562954719383");
@@ -132,7 +149,7 @@ module.exports = {
         },
         {
           "type": 10,
-          "content": `An Infraction has been sent for approval by ${interaction.user}.\n\n<:person:1506523692920737822> **User:** ${user}\n<:pin:1506523961356320820> **Type:** ${type}\n<:clipboard:1506523825817391136> **Reason:** ${reason}`
+          "content": `An Infraction has been sent for approval by ${interaction.user}.\n\n<:person:1506523692920737822> **User:** ${user}\n<:pin:1506523961356320820> **Type:** ${type}\n<:clipboard:1506523825817391136> **Reason:** ${reason}\n<:briefcase:1506523492747579424> **Proof:** ${proof}`
         },
         {
           "type": 14,
