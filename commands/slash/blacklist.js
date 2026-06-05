@@ -121,43 +121,52 @@ if (!member) {
 
             const logChannel = interaction.guild.channels.cache.get("1360197143628877884");
 
-            await logChannel.send({
-                "flags": 32768,
-                "components": [
-                    {
-                        "type": 17,
-                        "components": [
-                            {
-                                "type": 10,
-                                "content": "# <:briefcase:1506523492747579424> Blacklist Issued"
-                            },
-                            {
-                                "type": 14,
-                                "spacing": 2
-                            },
-                            {
-                                "type": 10,
-                                "content": `A blacklisted has been issued by ${interaction.user}. View information regarding it below.\n\n<:person:1506523692920737822> **User:** ${user}\n<:pin:1506523961356320820> **Duration:** ${duration}\n<:clipboard:1506523825817391136> **Reason:** ${reason}`
-                            },
-                            {
-                                "type": 14,
-                                "spacing": 2
-                            },
-                            {
-                                "type": 12,
-                                "items": [
-                                    {
-                                        "media": {
-                                            "url": "https://media.discordapp.net/attachments/1505376044474040440/1505728623922122795/Footers_55.png?ex=6a0fa30f&is=6a0e518f&hm=62f1834136f62eebe59cd636825c8d64d41c041ecf450aa8ce12051ffdd0d1c6&=&format=webp&quality=lossless"
-                                        }
-                                    }
-                                ]
+            const logMessage = await logChannel.send({
+    "flags": 32768,
+    "components": [
+        {
+            "type": 17,
+            "components": [
+                {
+                    "type": 10,
+                    "content": "# <:briefcase:1506523492747579424> Blacklist Issued"
+                },
+                {
+                    "type": 14,
+                    "spacing": 2
+                },
+                {
+                    "type": 10,
+                    "content": `A blacklisted has been issued by ${interaction.user}. View information regarding it below.\n\n<:person:1506523692920737822> **User:** ${user}\n<:pin:1506523961356320820> **Duration:** ${duration}\n<:clipboard:1506523825817391136> **Reason:** ${reason}`
+                },
+                {
+                    "type": 14,
+                    "spacing": 2
+                },
+                {
+                    "type": 12,
+                    "items": [
+                        {
+                            "media": {
+                                "url": "https://media.discordapp.net/attachments/1505376044474040440/1505728623922122795/Footers_55.png?ex=6a0fa30f&is=6a0e518f&hm=62f1834136f62eebe59cd636825c8d64d41c041ecf450aa8ce12051ffdd0d1c6&=&format=webp&quality=lossless"
                             }
-                        ],
-                        "spoiler": true
-                    }
-                ]
-            });
+                        }
+                    ]
+                }
+            ],
+            "spoiler": true
+        }
+    ]
+});
+
+    const thread = await logMessage.startThread({
+    name: `Blacklist - ${user.username}`,
+    autoArchiveDuration: 10080
+});
+
+await thread.send(
+    `${interaction.user} Provide proof of the blacklist here.`
+);
 
             await interaction.reply({
                 content: `<:check:1506513370625347816> **Successfully** issued blacklist to ${user}.`,
