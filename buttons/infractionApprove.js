@@ -3,6 +3,8 @@ module.exports = {
 
     async execute(interaction) {
 
+        await interaction.deferUpdate();
+
         const id = interaction.customId.split("_")[2];
 
         const db = interaction.client.db;
@@ -14,7 +16,7 @@ module.exports = {
         `).get(id);
 
         if (!infraction) {
-            return interaction.reply({
+            return interaction.followUp({
                 content: "<:xMark:1506513418470035467> Invalid infraction.",
                 flags: 64
             });
@@ -122,23 +124,17 @@ module.exports = {
             }]
         }).catch(() => {});
 
-        const data = JSON.parse(JSON.stringify(interaction.message.components));
+        const data = interaction.message.components.map(row => ({
+            ...row.data,
+            components: row.components?.map(component => ({
+                ...component.data,
+                disabled: component.data.type === 2
+                    ? true
+                    : component.data.disabled
+            }))
+        }));
 
-        for (const row of data) {
-            if (row.components) {
-                for (const component of row.components) {
-                    if (component.type === 2) {
-                        component.disabled = true;
-                    }
-                }
-            }
-        }
-
-        if (data[0]) {
-            data[0].accent_color = 5763719; // Discord Green
-        }
-
-        await interaction.update({
+        await interaction.message.edit({
             components: data
         });
 
