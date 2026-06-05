@@ -106,7 +106,7 @@ module.exports = {
                         },
                         {
                             "type": 10,
-                            "content": `<:person:1506523692920737822> **User:** ${user}\n<:pin:1506523961356320820> **Result:** ${result}\n<:clipboard:1506523825817391136> **Feedback:** ${feedback}`
+                            "content": `<:person:1506523692920737822> **User:** ${user}\n<:pin:1506523961356320820> **Result:** ${result}\n<:clipboard:1506523825817391136> **Feedback:** ${feedback}\n-# This ridealong was logged by ${interaction.user}.`
                         },
                         {
                             "type": 14,
