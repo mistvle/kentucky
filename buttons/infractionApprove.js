@@ -91,13 +91,11 @@ module.exports = {
             flags: 32768,
             components: [{
                 type: 17,
-                accent_color: 5763719,
                 components: [
                     {
                         type: 10,
                         content:
-`# <:shield:1507893287569199104> Infraction Issued - ${id}
--# Approved by ${interaction.user.username}`
+`# <:shield:1507893287569199104> Infraction Issued - ${id}`
                     },
                     {
                         type: 14,
@@ -110,8 +108,7 @@ module.exports = {
 
 **User:** <@${infraction.user_id}>
 **Type:** ${infraction.type}
-**Reason:** ${infraction.reason}
-**Proof:** ${infraction.proof || "N/A"}`
+**Reason:** ${infraction.reason}`
                     },
                     {
                         type: 14,
