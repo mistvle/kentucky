@@ -91,6 +91,18 @@ module.exports = {
                 .setDescription("Provide the infraction ID.")
                 .setRequired(true)
         )
+)
+
+        .addSubcommand(subcommand =>
+    subcommand
+        .setName("edit")
+        .setDescription("Edit an infraction.")
+        .addIntegerOption(option =>
+            option
+                .setName("id")
+                .setDescription("Provide the infraction ID.")
+                .setRequired(true)
+        )
 ),
 
     async execute(interaction) {
@@ -110,6 +122,50 @@ module.exports = {
         const db = interaction.client.db;
 
         const sub = interaction.options.getSubcommand();
+
+        // ================= EDIT =================
+if (sub === "edit") {
+    const id = interaction.options.getInteger("id");
+
+    const infraction = db.prepare(`
+        SELECT *
+        FROM infractions
+        WHERE id = ?
+    `).get(id);
+
+    if (!infraction) {
+        return interaction.reply({
+            content: "<:xMark:1506513418470035467> Invalid infraction ID.",
+            flags: 64
+        });
+    }
+
+    const modal = new ModalBuilder()
+        .setCustomId(`infraction_edit_modal_${id}`)
+        .setTitle(`Edit Infraction #${id}`);
+
+    const typeInput = new TextInputBuilder()
+        .setCustomId("type")
+        .setLabel("Type")
+        .setValue(infraction.type || "")
+        .setStyle(TextInputStyle.Short)
+        .setRequired(false);
+
+    const reasonInput = new TextInputBuilder()
+        .setCustomId("reason")
+        .setLabel("Reason")
+        .setValue(infraction.reason || "")
+        .setStyle(TextInputStyle.Paragraph)
+        .setRequired(false);
+
+    modal.addComponents(
+        new ActionRowBuilder().addComponents(punishmentInput),
+        new ActionRowBuilder().addComponents(typeInput),
+        new ActionRowBuilder().addComponents(reasonInput)
+    );
+
+    return interaction.showModal(modal);
+}
 
         // ================= ISSUE =================
         if (sub === "request") {
@@ -206,6 +262,15 @@ VALUES (?, ?, ?, ?, ?)
                 "animated": false
               },
               "custom_id": `infraction_deny_${id}`,
+              "flow": {
+                "actions": []
+              }
+            },
+            {
+              "style": 1,
+              "type": 2,
+              "label": "Edit",
+              "custom_id": `infraction_edit_${id}`,
               "flow": {
                 "actions": []
               }
