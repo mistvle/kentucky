@@ -25,13 +25,6 @@ module.exports = {
             });
         }
 
-        if (!infraction.approved) {
-            return interaction.reply({
-                content: "<:xMark:1506513418470035467> You may only edit approved infractions.",
-                flags: 64
-            });
-        }
-
         const modal = new ModalBuilder()
             .setCustomId(`infraction_edit_modal_${id}`)
             .setTitle(`Edit Infraction #${id}`);
